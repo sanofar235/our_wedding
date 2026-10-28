@@ -621,6 +621,9 @@
 </head>
 
 <body>
+  <audio id="bgMusic" loop preload="auto">
+    <source src="./music.mp3" type="audio/mpeg">
+  </audio>
   <main class="mobile" id="app">
     <!-- Royal Curtain Cover -->
     <section class="cover" id="cover" aria-label="Invitation cover">
@@ -792,13 +795,34 @@
     /* ====================================================== */
     const $ = id => document.getElementById(id);
     let opened = false, tapTimer = null, tapCount = 0;
+    const bgMusic = document.getElementById("bgMusic");
+
+    bgMusic.volume = 0.35;
+
+    function playBackgroundMusic() {
+      if (bgMusic.paused) {
+        bgMusic.play().catch(error => {
+          console.log("Music playback requires user interaction.");
+        });
+      }
+    }
+
+    function pauseBackgroundMusic() {
+      bgMusic.pause();
+    }
 
     function openInvite() {
       if (opened) return;
+
       opened = true;
+
+      playBackgroundMusic();
+
       $("cover").classList.add("opened");
       $("app").classList.add("opened-invite");
+
       window.scrollTo({ top: 0, behavior: "instant" });
+
       setTimeout(() => {
         initScratch();
       }, 700);
